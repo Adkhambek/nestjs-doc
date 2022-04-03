@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   Header,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -62,5 +64,9 @@ export class UserController {
   @Delete('delete')
   deleteUser(): string {
     return 'Delete user';
+  }
+  @Get('forbidden')
+  forbiddenPage() {
+    new HttpException('Forbidden', HttpStatus.FORBIDDEN);
   }
 }
