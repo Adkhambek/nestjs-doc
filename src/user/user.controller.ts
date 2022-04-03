@@ -7,12 +7,15 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
   Redirect,
   Req,
   Res,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserCreateDto } from './user.dto';
@@ -31,7 +34,8 @@ export class UserController {
     return res.send('Request & Response');
   }
   @Get('user/:id')
-  getUserById(@Param('id') id: string): string {
+  getUserById(@Param('id', ParseIntPipe) id: number): number {
+    console.log(id);
     return id;
   }
   @Get('filter')
@@ -40,6 +44,7 @@ export class UserController {
     return `sorted by ${query}`;
   }
   @Post()
+  @UsePipes(new ValidationPipe())
   createUser(@Body() input: UserCreateDto): UserCreateDto {
     return input;
   }
