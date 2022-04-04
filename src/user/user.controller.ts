@@ -45,8 +45,8 @@ export class UserController {
   }
   @Post()
   @UsePipes(new ValidationPipe())
-  createUser(@Body() input: UserCreateDto): UserCreateDto {
-    return input;
+  async createUser(@Body() userCreateDto: UserCreateDto): Promise<any> {
+    return await this.userService.create(userCreateDto);
   }
   @Get('ab*')
   getStringStartedWithab(@Req() req: Request): string {
