@@ -18,7 +18,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { UserCreateDto } from './user.dto';
+import { UserCreateDto } from './dto/userCreate.dto';
+import { UserUpdateDto } from './dto/userUpdate.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -34,9 +35,8 @@ export class UserController {
     return res.send('Request & Response');
   }
   @Get('user/:id')
-  getUserById(@Param('id', ParseIntPipe) id: number): number {
-    console.log(id);
-    return id;
+  getUserById(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.getUserById(id);
   }
   @Get('filter')
   getUsersByFilter(@Query('by') query: any): string {
@@ -62,13 +62,16 @@ export class UserController {
   async findAll(): Promise<string[]> {
     return ['Adham', 'Hasan', 'Fotima'];
   }
-  @Put('update')
-  updateUser(): string {
-    return 'update user';
+  @Put(':id')
+  updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() userUpdateDto: UserUpdateDto,
+  ) {
+    return this.userService.update(id, userUpdateDto);
   }
-  @Delete('delete')
-  deleteUser(): string {
-    return 'Delete user';
+  @Delete(':id')
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.remove(id);
   }
   @Get('forbidden')
   forbiddenPage() {
